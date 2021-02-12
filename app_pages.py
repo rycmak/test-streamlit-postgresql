@@ -1,14 +1,14 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import app_graphs
+import app_map
 import app_form
 
 def make_pages():
   # Register pages
     pages = {
         "About": page_about,
-        "Graphs": page_graphs,
-        "Form": page_form
+        "Where do magicians come from?": page_map,
+        "Become a magician!": page_form
     }
 
     st.sidebar.title("Navigation")
@@ -34,22 +34,26 @@ def page_about():
         </style>
 
         <h1 style='font-size: 1.5em; text-align: center'>
-            Welcome to my magnificent streamlit test app!
+            Welcome to the Magical World of <code>streamlit</code>!
         </h1>
         <h3 style='text-align: center; margin-bottom: 2em'>👷‍♀️👩‍💻👩‍👧‍👧</h3>
         <p>
-            This is a small test app with PostgreSQL for purposes of testing deployment 🪂.
+            This is the place where you can sign up to become a magnificent maestro magician! 🎩
+        </p>
+        <p>
+            (It is <s>actually</s> also a small test app with PostgreSQL for purposes of testing deployment 🪂.)
         </p>
         """
     components.html(html_string, height=600, scrolling=True)
 
-def page_graphs():
-    st.title("Informative graphs")
-    app_graphs.draw_map()
+def page_map():
+    st.title("Locations of magicians around the world")
+    df = app_map.load_data()
+    app_map.draw_map(df)
 
 def page_form():
+    st.image("assets/images/magician.jpg", width=200)
     st.header("Apply to become a magician! 🎈")
     applicant_info = app_form.signup()
     if st.button("Submit"):
-        print("applicant info: ", applicant_info)
         app_form.save(applicant_info)

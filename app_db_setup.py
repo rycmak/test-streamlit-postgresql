@@ -19,7 +19,10 @@ def init_db():
     cur.execute("""CREATE TABLE IF NOT EXISTS magicians (
                       year INTEGER NOT NULL,
                       name VARCHAR(255) NOT NULL PRIMARY KEY,
-                      comment TEXT NOT NULL
+                      city TEXT NOT NULL,
+                      country TEXT NOT NULL,
+                      latitude REAL NOT NULL,
+                      longitude REAL NOT NULL
                     );""")
     return connection
 
@@ -28,16 +31,17 @@ def init_db():
 
 
 def save(connection, response):
-    print("CONNECTION: ", connection)
     cur = connection.cursor()
-    query = "INSERT INTO magicians (year, name, comment) VALUES (%s, %s, %s);"
+    query = """INSERT INTO magicians (year, name, city, country, latitude, longitude) 
+                VALUES (%s, %s, %s, %s, %s, %s);"""
     data = [r for r in response.values()]
     try:
       cur.execute(query, data)
       st.success("Success!  You are now a magician! 🎉")
       st.balloons()
     except (Exception, psycopg2.DatabaseError) as error:
-      print(error)
+      st.error(f"You application to become a magician has been unsuccessful 😱.")
+      st.error(error)
    
     connection.close()
     print('Database connection closed.')
