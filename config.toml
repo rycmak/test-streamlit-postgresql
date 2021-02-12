@@ -1,0 +1,8 @@
+[postgresql]
+host=localhost
+database=magicians
+user=postgres
+#password=postgresql
+
+[data]
+year=2537

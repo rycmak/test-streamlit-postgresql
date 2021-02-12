@@ -1,16 +1,14 @@
 import streamlit as st
+from config import config
 import app_db_setup as dbs
-import json
 import requests
 
-with open('config.json') as config_file:
-  conf_data = json.load(config_file)
-
+params = config(section="data")
 
 def signup():
   
   applicant_info_1 = {
-    "year": conf_data["year"],
+    "year": params["year"],
     "name": st.text_input("Name", "")
   }
 
