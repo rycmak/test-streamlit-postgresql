@@ -1,7 +1,5 @@
-streamlit
-numpy
-pandas
-requests
-psycopg2
+streamlit=0.74.1
+requests==2.25.1
+psycopg2==2.8.4
 config
-json
+json==2.0.9
