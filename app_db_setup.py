@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from config import config
@@ -7,13 +8,16 @@ def init_db():
   """ Connect to PostgreSQL server """
   connection = None
   try:
-    params = config()
+    # params = config()
 
     # connect to the PostgreSQL server
     print('Connecting to the PostgreSQL database...')
-    db_name = params["database"]
+    # db_name = params["database"]
+    # connection = psycopg2.connect(**params)
 
-    connection = psycopg2.connect(**params)
+    DATABASE_URL = os.environ['DATABASE_URL']
+    connection = psycopg2.connect(DATABASE_URL, sslmode='require')
+
     connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cur = connection.cursor()
     cur.execute("""CREATE TABLE IF NOT EXISTS magicians (
