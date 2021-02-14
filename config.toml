@@ -1,7 +1,7 @@
 [postgresql]
 host=localhost
-database=magicians
 user=postgres
+database=magicians
 
 [data]
 year=2537

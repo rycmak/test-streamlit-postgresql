@@ -7,15 +7,14 @@ from config import config
 def init_db():
   """ Connect to PostgreSQL server """
   connection = None
+  if "DATABASE_URL" in os.environ:
+    DATABASE_URL = os.environ["DATABASE_URL"]
+  else:
+    db = config()
+    DATABASE_URL = f"postgresql://{db['user']}@{db['host']}/{db['database']}"
   try:
-    # params = config()
-
     # connect to the PostgreSQL server
     print('Connecting to the PostgreSQL database...')
-    # db_name = params["database"]
-    # connection = psycopg2.connect(**params)
-
-    DATABASE_URL = os.environ['DATABASE_URL']
     connection = psycopg2.connect(DATABASE_URL, sslmode='require')
 
     connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
