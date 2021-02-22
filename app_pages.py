@@ -1,13 +1,13 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import app_map
+import app_info
 import app_form
 
 def make_pages():
   # Register pages
     pages = {
         "About": page_about,
-        "Where do magicians come from?": page_map,
+        "Where do magicians come from?": page_info,
         "Become a magician!": page_form
     }
 
@@ -46,10 +46,11 @@ def page_about():
         """
     components.html(html_string, height=600, scrolling=True)
 
-def page_map():
+def page_info():
     st.title("Locations of magicians around the world")
-    df = app_map.load_data()
-    app_map.draw_map(df)
+    df = app_info.load_data()
+    app_info.draw_map(df)
+    app_info.list_shows()
 
 def page_form():
     st.image("assets/images/magician.jpg", width=200)

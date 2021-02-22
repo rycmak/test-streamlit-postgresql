@@ -8,7 +8,7 @@ params = config(section="data")
 def signup():
   
   applicant_info_1 = {
-    "year": params["year"],
+    # "year": params["year"],
     "name": st.text_input("Name", "")
   }
 
