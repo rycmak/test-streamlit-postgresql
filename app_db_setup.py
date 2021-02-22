@@ -16,17 +16,25 @@ def init_db():
     # connect to the PostgreSQL server
     print('Connecting to the PostgreSQL database...')
     connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-
     connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cur = connection.cursor()
     cur.execute("""CREATE TABLE IF NOT EXISTS magicians (
-                      year INTEGER NOT NULL,
-                      name VARCHAR(255) NOT NULL PRIMARY KEY,
+                      id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
+                      name VARCHAR(255) NOT NULL,
                       city TEXT NOT NULL,
                       country TEXT NOT NULL,
                       latitude REAL NOT NULL,
                       longitude REAL NOT NULL
-                    );""")
+                    );
+                """)
+    cur.execute("""CREATE TABLE IF NOT EXISTS shows (
+                      id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                      year INTEGER NOT NULL,
+                      month INTEGER NOT NULL,
+                      fk_magician_1_id INTEGER NOT NULL REFERENCES magicians(id),
+                      fk_magician_2_id INTEGER NOT NULL REFERENCES magicians(id)
+                    );
+                """)
     return connection
 
   except (Exception, psycopg2.DatabaseError) as error:
@@ -35,8 +43,8 @@ def init_db():
 
 def save(connection, response):
     cur = connection.cursor()
-    query = """INSERT INTO magicians (year, name, city, country, latitude, longitude) 
-                VALUES (%s, %s, %s, %s, %s, %s);"""
+    query = """INSERT INTO magicians (name, city, country, latitude, longitude) 
+                VALUES (%s, %s, %s, %s, %s);"""
     data = [r for r in response.values()]
     try:
       cur.execute(query, data)
