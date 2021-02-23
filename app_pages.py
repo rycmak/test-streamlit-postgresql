@@ -48,9 +48,11 @@ def page_about():
 
 def page_info():
     st.title("Locations of magicians around the world")
-    df = app_info.load_data()
-    app_info.draw_map(df)
-    app_info.list_shows()
+    magicians_df, shows_df = app_info.load_data()
+    app_info.draw_map(magicians_df)
+    app_info.list_shows_from_db()
+    app_info.list_shows_from_df(magicians_df, shows_df)
+
 
 def page_form():
     st.image("assets/images/magician.jpg", width=200)
