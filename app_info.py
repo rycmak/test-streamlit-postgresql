@@ -16,10 +16,19 @@ def load_data():
     connection.close()
     return magicians_all_df, locations_df, magicians_rounds_df, shows_df
 
+
 def draw_map(df):
     st.map(df[["latitude", "longitude"]], zoom = 0)
-    if st.checkbox("Reveal all magicians"):
-        st.write(df[["id", "name", "city", "country"]])
+    
+
+def reveal_magicians(mag_all_df, mag_rounds_df, loc_df):
+    merged_df = pd.merge(mag_all_df, mag_rounds_df, 
+                                        left_on="id", right_on="fk_magician_id")
+    merged_df.drop_duplicates(subset=["name"], inplace=True)
+    mag_loc_df = pd.merge(merged_df, loc_df, 
+                            left_on="fk_location_id", right_on="id")[["name", "city", "country"]]
+    st.write(mag_loc_df)
+
 
 def list_shows_from_db():
     st.header("Find magic shows using DB tables:")
