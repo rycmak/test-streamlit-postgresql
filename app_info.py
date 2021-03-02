@@ -5,12 +5,16 @@ import pandas as pd
 def load_data():
     connection = dbs.init_db()
     cur = connection.cursor()
-    query = "SELECT * FROM magicians;"
-    magicians_df = pd.read_sql_query(query, connection)
+    query = "SELECT * FROM magicians_all;"
+    magicians_all_df = pd.read_sql_query(query, connection)
+    query = "SELECT * FROM locations;"
+    locations_df = pd.read_sql_query(query, connection)
+    query = "SELECT * FROM magicians_rounds;"
+    magicians_rounds_df = pd.read_sql_query(query, connection)
     query = "SELECT * FROM shows;"
     shows_df = pd.read_sql_query(query, connection)
     connection.close()
-    return magicians_df, shows_df
+    return magicians_all_df, locations_df, magicians_rounds_df, shows_df
 
 def draw_map(df):
     st.map(df[["latitude", "longitude"]], zoom = 0)
