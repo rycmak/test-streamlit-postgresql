@@ -1,7 +1,13 @@
 __pycache__/
 
+<<<<<<< HEAD
 # Passwords
 secrets.toml
 
 # test scripts
 test_*.py
+=======
+secrets.toml
+
+test*.py
+>>>>>>> 6c120542071499b5bc677fe67f966f4a3a1352af

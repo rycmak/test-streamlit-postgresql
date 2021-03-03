@@ -2,6 +2,11 @@ import streamlit as st
 import streamlit.components.v1 as components
 import app_info
 import app_form
+import app_matches
+import SessionState
+from config import config
+
+session_state = SessionState.get(admin=False, admin_pw='')
 
 def make_pages():
   # Register pages
@@ -12,10 +17,17 @@ def make_pages():
     }
 
     st.sidebar.title("Navigation")
+    admin_btn = st.sidebar.empty()
     # Radio buttons for selecting page
-    page = st.sidebar.radio("Go to", tuple(pages.keys()))
-    # Display the selected page
-    pages[page]()
+    if not session_state.admin:
+        page = st.sidebar.radio("Go to", tuple(pages.keys()))
+        admin_btn = st.sidebar.button("Admin")
+    if admin_btn:
+        session_state.admin = True
+        page_admin()
+    else:
+        pages[page]()    
+
 
 # Intro page
 def page_about():
@@ -48,10 +60,12 @@ def page_about():
 
 def page_info():
     st.title("Locations of magicians around the world")
-    magicians_df, shows_df = app_info.load_data()
-    app_info.draw_map(magicians_df)
-    app_info.list_shows_from_db()
-    app_info.list_shows_from_df(magicians_df, shows_df)
+    magicians_all_df, locations_df, magicians_rounds_df, shows_df = app_info.load_data()
+    app_info.draw_map(locations_df)
+    if st.checkbox("Reveal all magicians"):
+        app_info.reveal_magicians(magicians_all_df, magicians_rounds_df, locations_df)
+    # app_info.list_shows_from_db()
+    # app_info.list_shows_from_df(magicians_df, shows_df)
 
 
 def page_form():
@@ -60,3 +74,18 @@ def page_form():
     applicant_info = app_form.signup()
     if st.button("Submit"):
         app_form.save(applicant_info)
+
+
+def page_admin():
+    admin_pw = config(filename='secrets.toml', section='admin')['pw']
+    if session_state.admin_pw == admin_pw:
+        app_matches.match_buddies()
+        session_state.admin = False
+    else:
+        pw = st.text_input("Admin password:", "")
+        session_state.admin_pw = pw
+        if session_state.admin_pw == admin_pw:
+            raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
+        elif st.button("Return to home page"):
+            session_state.admin = False
+            raise st.script_runner.RerunException(st.script_request_queue.RerunData(None))
