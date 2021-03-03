@@ -15,10 +15,14 @@ def signup():
   city, country = st.beta_columns(2)
   applicant_info_2 = {
     "city": city.text_input("City", ""),
-    "country": country.text_input("Country")
+    "country": country.text_input("Country", "")
   }
 
-  applicant_info = {**applicant_info_1, **applicant_info_2}
+  applicant_info_3 = {
+    "comments": st.text_area("Comments", "")
+  }
+
+  applicant_info = {**applicant_info_1, **applicant_info_2, **applicant_info_3}
   return applicant_info
 
 

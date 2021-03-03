@@ -60,10 +60,12 @@ def page_about():
 
 def page_info():
     st.title("Locations of magicians around the world")
-    magicians_df, shows_df = app_info.load_data()
-    app_info.draw_map(magicians_df)
-    app_info.list_shows_from_db()
-    app_info.list_shows_from_df(magicians_df, shows_df)
+    magicians_all_df, locations_df, magicians_rounds_df, shows_df = app_info.load_data()
+    app_info.draw_map(locations_df)
+    if st.checkbox("Reveal all magicians"):
+        app_info.reveal_magicians(magicians_all_df, magicians_rounds_df, locations_df)
+    # app_info.list_shows_from_db()
+    # app_info.list_shows_from_df(magicians_df, shows_df)
 
 
 def page_form():
