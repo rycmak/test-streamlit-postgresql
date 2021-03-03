@@ -1,1 +1,7 @@
 __pycache__/
+
+# Passwords
+secrets.toml
+
+# test scripts
+test_*.py
